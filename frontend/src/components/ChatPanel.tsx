@@ -10,10 +10,9 @@ interface Message {
 
 interface ChatPanelProps {
   onSendMessage: (msg: string) => Promise<string>;
-  compact?: boolean;
 }
 
-export const ChatPanel: React.FC<ChatPanelProps> = ({ onSendMessage, compact = false }) => {
+export const ChatPanel: React.FC<ChatPanelProps> = ({ onSendMessage }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);

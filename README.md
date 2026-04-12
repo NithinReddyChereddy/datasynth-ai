@@ -119,5 +119,3 @@ The application uses a custom-built design system based on:
 Distributed under the MIT License. See `LICENSE` for more information.
 
 ---
-
-Built with ❤️ by AI for the future of Data.

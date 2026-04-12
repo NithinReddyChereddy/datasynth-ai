@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, HelpCircle, Mail, MessageCircle, FileText, Globe } from 'lucide-react';
+import { X, HelpCircle, MessageCircle, FileText, Globe } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface SupportModalProps {
