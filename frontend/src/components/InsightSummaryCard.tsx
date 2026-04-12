@@ -16,14 +16,14 @@ export const InsightSummaryCard: React.FC<InsightSummaryCardProps> = ({ insights
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="dashboard-card h-full min-h-[400px] overflow-hidden shadow-2xl border-[var(--card-border)] bg-[var(--card-bg)] flex flex-col relative group"
+      className="dashboard-card h-full overflow-hidden shadow-2xl border-[var(--card-border)] bg-[var(--card-bg)] flex flex-col relative group"
     >
       <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
         <Sparkles className="w-32 h-32 text-primary" />
       </div>
       
-      <div className="relative z-10 flex-1 p-8 flex flex-col">
-        <div className="mb-8">
+      <div className="relative z-10 flex-1 p-6 flex flex-col">
+        <div className="mb-6">
           <div className="flex items-center justify-between">
             <h3 className="text-xl font-[900] tracking-tighter uppercase italic flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20 shadow-lg shadow-primary/5">
