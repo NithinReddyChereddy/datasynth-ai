@@ -300,7 +300,7 @@ export const ChartCard: React.FC<ChartCardProps> = ({ title, type, data }) => {
     <motion.div
       initial={{ opacity: 0, scale: 0.98 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="dashboard-card p-6"
+      className="dashboard-card p-6 h-full"
     >
       <div className="flex items-center justify-between mb-8">
         <div>
