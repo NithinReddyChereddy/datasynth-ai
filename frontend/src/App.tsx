@@ -687,7 +687,7 @@ function App() {
               >
                 <X className="w-5 h-5" />
               </button>
-              <ChatPanel onSendMessage={handleChatMessage} compact={false} />
+              <ChatPanel onSendMessage={handleChatMessage} />
             </div>
           </motion.div>
         )}
