@@ -50,7 +50,7 @@ export const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose, onC
                 { icon: MessageCircle, label: 'AI Chatbot', desc: 'Real-time Assistance', color: 'primary', action: onChatClick },
                 { icon: Globe, label: 'System Status', desc: 'Status: Optimal', color: 'secondary' },
                 { icon: FileText, label: 'Documentation', desc: 'Protocol Guides', color: 'text-main' },
-                { icon: HelpCircle, label: 'Knowledge Base', desc: 'Core Wiki', color: 'primary' },
+                { icon: HelpCircle, label: 'Knowledge Base', desc: 'Documentation Wiki', color: 'primary' },
               ].map((item, i) => (
                 <button 
                   key={i} 

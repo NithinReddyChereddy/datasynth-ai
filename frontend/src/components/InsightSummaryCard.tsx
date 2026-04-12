@@ -78,14 +78,7 @@ export const InsightSummaryCard: React.FC<InsightSummaryCardProps> = ({ insights
           )}
         </div>
         
-        <div className="mt-8 pt-6 border-t border-[var(--card-border)] opacity-40">
-           <div className="flex items-center gap-2">
-              <div className={`w-1.5 h-1.5 rounded-full bg-primary ${isLoading ? 'animate-pulse' : ''}`} />
-              <span className="text-[8px] font-black uppercase tracking-widest italic">
-                {isLoading ? 'Quantum Neural Core Processing' : 'Quantum Engine Active'}
-              </span>
-           </div>
-        </div>
+
       </div>
     </motion.div>
   );

@@ -202,7 +202,7 @@ function App() {
       const response = await axios.post(`${API_BASE}/chat`, { message: msg });
       return response.data.response;
     } catch (error) {
-       return "I'm having trouble connecting to the AI core. Please ensure the backend is active.";
+       return "I'm having trouble connecting to the AI engine. Please ensure the backend is active.";
     }
   };
 
@@ -440,7 +440,7 @@ function App() {
         <div>
           <h2 className="text-3xl font-black tracking-tighter uppercase italic">Intelligence Hub</h2>
           <p className="text-[10px] text-[var(--subtext)] mt-2 font-bold uppercase tracking-[0.2em] opacity-60">
-            Synthesized stream from {filteredData?.filename || 'the quantum core'}
+            Synthesized stream from {filteredData?.filename || 'your dataset'}
           </p>
         </div>
         <div className="flex items-center gap-4">
