@@ -37,7 +37,18 @@
 
 ---
 
-## 🚀 Getting Started
+## 🌐 Live Demo & Deployment
+
+### [View Live Demo](https://your-frontend-link.vercel.app)
+
+The project is optimized for deployment on:
+- **Backend**: Hosted on [Render](https://render.com) using a Python Web Service.
+- **Frontend**: Hosted on [Vercel](https://vercel.com) for edge-optimized delivery.
+
+---
+
+## 🚀 Local Development
+Follow these steps to run the project on your machine.
 
 ### 1. Prerequisites
 - Python 3.10+
