@@ -1,5 +1,5 @@
 import React from 'react';
-import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, BarChart, Bar, ScatterChart, Scatter, PieChart, Pie, Cell } from 'recharts';
+import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, BarChart, Bar, ScatterChart, Scatter, PieChart, Pie, Cell, LabelList } from 'recharts';
 import { motion } from 'framer-motion';
 import { Activity } from 'lucide-react';
 
@@ -37,6 +37,17 @@ export const ChartCard: React.FC<ChartCardProps> = ({ title, type, data }) => {
   const chartColor = "#10B981"; // Primary Emerald
   const secondaryColor = "#22D3EE"; // Secondary Cyan
   
+  const formatLabel = (val: number) => {
+    if (typeof val !== 'number') return val;
+    const isCurrency = ['revenue', 'value', 'price', 'sales', 'amount', 'cost', 'income'].some(k => title.toLowerCase().includes(k));
+    const formatted = val >= 1000000 
+      ? `${(val/1000000).toFixed(1)}M` 
+      : val >= 1000 
+        ? `${(val/1000).toFixed(1)}k` 
+        : val.toLocaleString(undefined, { maximumFractionDigits: 1 });
+    return isCurrency ? `$${formatted}` : formatted;
+  };
+
   const commonAxisProps = {
     stroke: "var(--subtext)",
     fontSize: 11,
@@ -177,14 +188,14 @@ export const ChartCard: React.FC<ChartCardProps> = ({ title, type, data }) => {
         }));
         return (
           <ResponsiveContainer width="100%" height={260}>
-            <AreaChart data={lineData} margin={{ top: 10, right: 30, left: 0, bottom: 20 }}>
+            <AreaChart data={lineData} margin={{ top: 25, right: 30, left: 10, bottom: 20 }}>
               <defs>
                 <linearGradient id="colorArea" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor={chartColor} stopOpacity={0.3}/>
+                  <stop offset="5%" stopColor={chartColor} stopOpacity={0.35}/>
                   <stop offset="95%" stopColor={chartColor} stopOpacity={0}/>
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--card-border)" vertical={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--card-border)" vertical={false} opacity={0.3} />
               <XAxis 
                 dataKey="x" 
                 type="category"
@@ -195,7 +206,15 @@ export const ChartCard: React.FC<ChartCardProps> = ({ title, type, data }) => {
               <YAxis 
                 type="number"
                 {...commonAxisProps} 
-                tickFormatter={(val) => val >= 1000 ? `${(val/1000).toFixed(1)}k` : val}
+                tickFormatter={(val) => {
+                  const isCurrency = ['revenue', 'value', 'price', 'sales', 'amount', 'cost', 'income'].some(k => title.toLowerCase().includes(k));
+                  const formatted = val >= 1000000 
+                    ? `${(val/1000000).toFixed(1)}M` 
+                    : val >= 1000 
+                      ? `${(val/1000).toFixed(1)}k` 
+                      : val;
+                  return isCurrency ? `$${formatted}` : formatted;
+                }}
               />
               <Tooltip content={<CustomTooltip type={type} />} cursor={{ stroke: chartColor, strokeWidth: 1, strokeDasharray: '4 4' }} />
               <Area 
@@ -206,8 +225,17 @@ export const ChartCard: React.FC<ChartCardProps> = ({ title, type, data }) => {
                 fillOpacity={1} 
                 fill="url(#colorArea)" 
                 animationDuration={1500}
+                dot={{ r: 4, fill: 'var(--bg-main)', stroke: chartColor, strokeWidth: 2 }}
                 activeDot={{ r: 6, fill: chartColor, stroke: 'white', strokeWidth: 2 }}
-              />
+              >
+                <LabelList 
+                  dataKey="y" 
+                  position="top" 
+                  offset={10} 
+                  formatter={formatLabel} 
+                  style={{ fill: chartColor, fontSize: 9, fontWeight: 700 }} 
+                />
+              </Area>
             </AreaChart>
           </ResponsiveContainer>
         );
@@ -219,8 +247,8 @@ export const ChartCard: React.FC<ChartCardProps> = ({ title, type, data }) => {
         }));
         return (
           <ResponsiveContainer width="100%" height={260}>
-            <BarChart data={barData} margin={{ top: 10, right: 30, left: 0, bottom: 20 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--card-border)" vertical={false} />
+            <BarChart data={barData} margin={{ top: 25, right: 30, left: 10, bottom: 20 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--card-border)" vertical={false} opacity={0.3} />
               <XAxis 
                 dataKey="name" 
                 type="category"
@@ -233,7 +261,15 @@ export const ChartCard: React.FC<ChartCardProps> = ({ title, type, data }) => {
               <YAxis 
                 type="number"
                 {...commonAxisProps} 
-                tickFormatter={(val) => val >= 1000 ? `${(val/1000).toFixed(1)}k` : val}
+                tickFormatter={(val) => {
+                  const isCurrency = ['revenue', 'value', 'price', 'sales', 'amount', 'cost', 'income'].some(k => title.toLowerCase().includes(k));
+                  const formatted = val >= 1000000 
+                    ? `${(val/1000000).toFixed(1)}M` 
+                    : val >= 1000 
+                      ? `${(val/1000).toFixed(1)}k` 
+                      : val;
+                  return isCurrency ? `$${formatted}` : formatted;
+                }}
               />
               <Tooltip content={<CustomTooltip type={type} />} cursor={{ fill: 'var(--color-primary)', opacity: 0.05 }} />
               <Bar 
@@ -242,7 +278,15 @@ export const ChartCard: React.FC<ChartCardProps> = ({ title, type, data }) => {
                 radius={[6, 6, 0, 0]} 
                 animationDuration={1000}
                 barSize={Math.min(40, 400 / barData.length)}
-              />
+              >
+                <LabelList 
+                  dataKey="value" 
+                  position="top" 
+                  offset={10} 
+                  formatter={formatLabel} 
+                  style={{ fill: chartColor, fontSize: 9, fontWeight: 700 }} 
+                />
+              </Bar>
             </BarChart>
           </ResponsiveContainer>
         );
@@ -251,10 +295,21 @@ export const ChartCard: React.FC<ChartCardProps> = ({ title, type, data }) => {
         const histData = (data.labels || []).map((label: any, i: number) => ({ name: label, value: data.values?.[i] }));
         return (
           <ResponsiveContainer width="100%" height={260}>
-            <AreaChart data={histData} margin={{ top: 10, right: 30, left: 0, bottom: 20 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--card-border)" vertical={false} />
+            <AreaChart data={histData} margin={{ top: 25, right: 30, left: 10, bottom: 20 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--card-border)" vertical={false} opacity={0.3} />
               <XAxis dataKey="name" {...commonAxisProps} tick={{ fontSize: 9 }} />
-              <YAxis {...commonAxisProps} tickFormatter={(val) => val >= 1000 ? `${(val/1000).toFixed(1)}k` : val} />
+              <YAxis 
+                {...commonAxisProps} 
+                tickFormatter={(val) => {
+                  const isCurrency = ['revenue', 'value', 'price', 'sales', 'amount', 'cost', 'income'].some(k => title.toLowerCase().includes(k));
+                  const formatted = val >= 1000000 
+                    ? `${(val/1000000).toFixed(1)}M` 
+                    : val >= 1000 
+                      ? `${(val/1000).toFixed(1)}k` 
+                      : val;
+                  return isCurrency ? `$${formatted}` : formatted;
+                }}
+              />
               <Tooltip content={<CustomTooltip type={type} />} />
               <Area 
                 type="monotone" 
@@ -264,7 +319,16 @@ export const ChartCard: React.FC<ChartCardProps> = ({ title, type, data }) => {
                 fill={secondaryColor} 
                 fillOpacity={0.15}
                 animationDuration={1200}
-              />
+                dot={{ r: 3, fill: 'var(--bg-main)', stroke: secondaryColor, strokeWidth: 1.5 }}
+              >
+                <LabelList 
+                  dataKey="value" 
+                  position="top" 
+                  offset={10} 
+                  formatter={formatLabel} 
+                  style={{ fill: secondaryColor, fontSize: 8, fontWeight: 700 }} 
+                />
+              </Area>
             </AreaChart>
           </ResponsiveContainer>
         );
