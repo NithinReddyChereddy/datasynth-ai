@@ -31,7 +31,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView, isO
 
   return (
     <aside className={`
-      fixed left-0 top-0 h-screen w-64 bg-[var(--card-bg)] border-r border-[var(--card-border)] backdrop-blur-[var(--backdrop-blur)] flex flex-col z-50 transition-all duration-300
+      fixed left-0 top-0 h-screen w-64 bg-[var(--card-bg)] border-r border-[var(--card-border)] backdrop-blur-[var(--backdrop-blur)] flex flex-col z-[100] transition-all duration-300
       ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
     `}>
       {/* Brand Section */}

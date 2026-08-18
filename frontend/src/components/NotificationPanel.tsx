@@ -30,13 +30,13 @@ export const NotificationPanel: React.FC<NotificationPanelProps> = ({
       {isOpen && (
         <>
           {/* Backdrop for outside click */}
-          <div className="fixed inset-0 z-50" onClick={onClose} />
+          <div className="fixed inset-0 z-[95]" onClick={onClose} />
           
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: -20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -20 }}
-            className="fixed top-20 right-4 sm:top-24 sm:right-8 w-[calc(100vw-32px)] sm:w-96 bg-[var(--card-bg)] backdrop-blur-[var(--backdrop-blur)] border border-[var(--card-border)] rounded-3xl shadow-2xl z-[60] overflow-hidden"
+            className="fixed top-20 right-4 sm:top-24 sm:right-8 w-[calc(100vw-32px)] sm:w-96 bg-[var(--card-bg)] backdrop-blur-[var(--backdrop-blur)] border border-[var(--card-border)] rounded-3xl shadow-2xl z-[100] overflow-hidden"
           >
             <div className="p-6 border-b border-[var(--card-border)] flex items-center justify-between">
               <div>
