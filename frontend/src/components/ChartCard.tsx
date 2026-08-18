@@ -356,23 +356,53 @@ export const ChartCard: React.FC<ChartCardProps> = ({ title, type, data }) => {
           </ResponsiveContainer>
         );
 
-      case 'scatter':
-        const scatterData = (normalizedData.x_data || []).map((x: any, i: number) => ({ x, y: normalizedData.y_data?.[i] }));
+      case 'scatter': {
+        const rawX = normalizedData.x_data || [];
+        const rawY = normalizedData.y_data || [];
+        const isXNumeric = rawX.length > 0 && rawX.every((x: unknown) => x !== null && x !== undefined && !isNaN(Number(x)));
+        const isYNumeric = rawY.length > 0 && rawY.every((y: unknown) => y !== null && y !== undefined && !isNaN(Number(y)));
+        
+        const scatterData = rawX.map((x: unknown, i: number) => ({
+          x: isXNumeric ? Number(x) : x,
+          y: isYNumeric ? Number(rawY[i]) : rawY[i]
+        }));
+
         return (
           <ResponsiveContainer width="100%" height={260}>
-            <ScatterChart margin={{ top: 10, right: 30, left: 0, bottom: 20 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--card-border)" />
-              <XAxis type="number" dataKey="x" name={normalizedData.x_label} {...commonAxisProps} />
-              <YAxis type="number" dataKey="y" name={normalizedData.y_label} {...commonAxisProps} />
+            <ScatterChart margin={{ top: 10, right: 30, left: 10, bottom: 20 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--card-border)" vertical={false} opacity={0.3} />
+              <XAxis 
+                type={isXNumeric ? "number" : "category"} 
+                dataKey="x" 
+                name={normalizedData.x_label || 'X'} 
+                {...commonAxisProps} 
+              />
+              <YAxis 
+                type={isYNumeric ? "number" : "category"} 
+                dataKey="y" 
+                name={normalizedData.y_label || 'Y'} 
+                {...commonAxisProps} 
+                tickFormatter={(val) => {
+                  if (typeof val !== 'number') return val;
+                  const isCurrency = ['revenue', 'value', 'price', 'sales', 'amount', 'cost', 'income'].some(k => title.toLowerCase().includes(k));
+                  const formatted = val >= 1000000 
+                    ? `${(val/1000000).toFixed(1)}M` 
+                    : val >= 1000 
+                      ? `${(val/1000).toFixed(1)}k` 
+                      : val;
+                  return isCurrency ? `$${formatted}` : formatted;
+                }}
+              />
               <Tooltip cursor={{ strokeDasharray: '3 3' }} content={<CustomTooltip type={type} />} />
               <Scatter name="Data" data={scatterData} fill={chartColor} animationDuration={1800}>
-                {scatterData.map((_: any, index: number) => (
+                {scatterData.map((_: unknown, index: number) => (
                   <Cell key={`cell-${index}`} fill={chartColor} fillOpacity={0.6} />
                 ))}
               </Scatter>
             </ScatterChart>
           </ResponsiveContainer>
         );
+      }
 
       default:
         return (
