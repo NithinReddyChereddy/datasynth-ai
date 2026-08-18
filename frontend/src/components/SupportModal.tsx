@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, HelpCircle, MessageCircle, FileText, Globe } from 'lucide-react';
+import { X, HelpCircle, MessageCircle, Globe } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface SupportModalProps {
@@ -34,7 +34,6 @@ export const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose, onC
                 </div>
                 <div>
                   <h2 className="text-2xl font-black tracking-tighter uppercase italic">Support Center</h2>
-                  <p className="text-[10px] font-bold text-primary uppercase tracking-widest mt-1">Status: Neural Hub Online</p>
                 </div>
               </div>
               <button 
@@ -49,8 +48,6 @@ export const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose, onC
               {[
                 { icon: MessageCircle, label: 'AI Chatbot', desc: 'Real-time Assistance', color: 'primary', action: onChatClick },
                 { icon: Globe, label: 'System Status', desc: 'Status: Optimal', color: 'secondary' },
-                { icon: FileText, label: 'Documentation', desc: 'Protocol Guides', color: 'text-main' },
-                { icon: HelpCircle, label: 'Knowledge Base', desc: 'Documentation Wiki', color: 'primary' },
               ].map((item, i) => (
                 <button 
                   key={i} 

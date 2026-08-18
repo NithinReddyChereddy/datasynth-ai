@@ -60,7 +60,6 @@ export const NotificationPanel: React.FC<NotificationPanelProps> = ({
                     <Info className="w-6 h-6 text-primary/40" />
                   </div>
                   <p className="text-sm font-bold text-[var(--subtext)]">No notifications yet</p>
-                  <p className="text-[10px] text-[var(--subtext)] mt-1 uppercase tracking-widest opacity-60">System core is healthy</p>
                 </div>
               ) : (
                 <div className="divide-y divide-[var(--card-border)]">
