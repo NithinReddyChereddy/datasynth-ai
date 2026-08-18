@@ -157,7 +157,7 @@ class DataAnalyzer:
                     "y_label": "Frequency"
                 })
 
-        # C. Categorical Comparison (Bar Chart) - More bar charts
+        # C. Categorical Comparison (Bar, Pie, or Line Chart)
         for col in categorical_cols[:6]:
             counts = self.df[col].value_counts()
             num_categories = len(counts)
@@ -171,12 +171,23 @@ class DataAnalyzer:
             else:
                 continue
 
+            # Smart selection logic:
+            col_lower = col.lower()
+            is_temporal = any(k in col_lower for k in ['month', 'year', 'quarter', 'date', 'day', 'week', 'time', 'period'])
+            
+            if is_temporal:
+                chart_type = "line"
+            elif 2 <= num_categories <= 5:
+                chart_type = "pie"
+            else:
+                chart_type = "bar"
+
             suggestions.append({
-                "id": f"bar_{col}",
-                "type": "bar",
+                "id": f"cat_{col}",
+                "type": chart_type,
                 "title": title,
-                "labels": display_counts.index.tolist(),
-                "values": display_counts.values.tolist(),
+                "labels": display_counts.index.astype(str).tolist(),
+                "values": display_counts.tolist(),
                 "x_label": col,
                 "y_label": "Count"
             })
