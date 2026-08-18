@@ -1,7 +1,7 @@
 import React from 'react';
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, BarChart, Bar, ScatterChart, Scatter, PieChart, Pie, Cell, LabelList } from 'recharts';
 import { motion } from 'framer-motion';
-import { Activity } from 'lucide-react';
+import { Activity, TrendingUp, BarChart3, PieChart as PieIcon } from 'lucide-react';
 
 interface ChartCardProps {
   title: string;
@@ -37,6 +37,28 @@ export const ChartCard: React.FC<ChartCardProps> = ({ title, type, data }) => {
   const chartColor = "#10B981"; // Primary Emerald
   const secondaryColor = "#22D3EE"; // Secondary Cyan
   
+  const [activeType, setActiveType] = React.useState(type);
+
+  React.useEffect(() => {
+    setActiveType(type);
+  }, [type]);
+
+  const normalizedData = React.useMemo(() => {
+    if (!data) return null;
+    const labels = data.labels || data.x || data.x_data || [];
+    const values = data.values || data.y || data.y_data || [];
+    
+    return {
+      ...data,
+      x: labels,
+      y: values,
+      labels: labels,
+      values: values,
+      x_data: labels,
+      y_data: values
+    };
+  }, [data]);
+  
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const formatLabel = (val: any) => {
     if (typeof val !== 'number') return val;
@@ -59,7 +81,7 @@ export const ChartCard: React.FC<ChartCardProps> = ({ title, type, data }) => {
   };
 
   const renderChart = () => {
-    if (!data || type === 'empty') return (
+    if (!normalizedData || activeType === 'empty') return (
       <div className="h-[260px] flex flex-col items-center justify-center text-center space-y-3 px-8">
         <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center border border-white/10">
           <Activity className="w-6 h-6 text-[var(--subtext)] opacity-50" />
@@ -75,9 +97,9 @@ export const ChartCard: React.FC<ChartCardProps> = ({ title, type, data }) => {
       </div>
     );
 
-    switch (type) {
+    switch (activeType) {
       case 'pie':
-        const pieData = data.labels?.map((label: any, i: number) => ({ name: label, value: data.values?.[i] })) || [];
+        const pieData = normalizedData.labels?.map((label: any, i: number) => ({ name: label, value: normalizedData.values?.[i] })) || [];
         const COLORS = [chartColor, secondaryColor, '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899'];
         return (
           <ResponsiveContainer width="100%" height={260}>
@@ -105,8 +127,8 @@ export const ChartCard: React.FC<ChartCardProps> = ({ title, type, data }) => {
         );
 
       case 'heatmap':
-        const columns = data.columns || [];
-        const matrix = data.data || {};
+        const columns = normalizedData.columns || [];
+        const matrix = normalizedData.data || {};
         return (
           <div className="h-[260px] flex flex-col pt-4 overflow-auto scrollbar-none">
             <div className="grid gap-px bg-[var(--card-border)] border border-[var(--card-border)] rounded-sm overflow-hidden" style={{ gridTemplateColumns: `repeat(${columns.length + 1}, minmax(0, 1fr))` }}>
@@ -142,7 +164,7 @@ export const ChartCard: React.FC<ChartCardProps> = ({ title, type, data }) => {
         );
 
       case 'boxplot':
-        const stats = data.stats || {};
+        const stats = normalizedData.stats || {};
         const range = (stats.max - stats.min) || 1;
         const boxHeight = ((stats.q3 - stats.q1) / range) * 100;
         const boxBottom = ((stats.q1 - stats.min) / range) * 100;
@@ -183,9 +205,9 @@ export const ChartCard: React.FC<ChartCardProps> = ({ title, type, data }) => {
         );
 
       case 'line':
-        const lineData = (data.x || []).map((label: any, i: number) => ({ 
+        const lineData = (normalizedData.x || []).map((label: any, i: number) => ({ 
           x: label, 
-          y: parseFloat(data.y?.[i]) || 0 
+          y: parseFloat(normalizedData.y?.[i]) || 0 
         }));
         return (
           <ResponsiveContainer width="100%" height={260}>
@@ -242,9 +264,9 @@ export const ChartCard: React.FC<ChartCardProps> = ({ title, type, data }) => {
         );
 
       case 'bar':
-        const barData = (data.labels || []).map((label: any, i: number) => ({ 
+        const barData = (normalizedData.labels || []).map((label: any, i: number) => ({ 
           name: label, 
-          value: parseFloat(data.values?.[i]) || 0 
+          value: parseFloat(normalizedData.values?.[i]) || 0 
         }));
         return (
           <ResponsiveContainer width="100%" height={260}>
@@ -293,7 +315,7 @@ export const ChartCard: React.FC<ChartCardProps> = ({ title, type, data }) => {
         );
 
       case 'histogram':
-        const histData = (data.labels || []).map((label: any, i: number) => ({ name: label, value: data.values?.[i] }));
+        const histData = (normalizedData.labels || []).map((label: any, i: number) => ({ name: label, value: normalizedData.values?.[i] }));
         return (
           <ResponsiveContainer width="100%" height={260}>
             <AreaChart data={histData} margin={{ top: 25, right: 30, left: 10, bottom: 20 }}>
@@ -335,13 +357,13 @@ export const ChartCard: React.FC<ChartCardProps> = ({ title, type, data }) => {
         );
 
       case 'scatter':
-        const scatterData = (data.x_data || []).map((x: any, i: number) => ({ x, y: data.y_data?.[i] }));
+        const scatterData = (normalizedData.x_data || []).map((x: any, i: number) => ({ x, y: normalizedData.y_data?.[i] }));
         return (
           <ResponsiveContainer width="100%" height={260}>
             <ScatterChart margin={{ top: 10, right: 30, left: 0, bottom: 20 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--card-border)" />
-              <XAxis type="number" dataKey="x" name={data.x_label} {...commonAxisProps} />
-              <YAxis type="number" dataKey="y" name={data.y_label} {...commonAxisProps} />
+              <XAxis type="number" dataKey="x" name={normalizedData.x_label} {...commonAxisProps} />
+              <YAxis type="number" dataKey="y" name={normalizedData.y_label} {...commonAxisProps} />
               <Tooltip cursor={{ strokeDasharray: '3 3' }} content={<CustomTooltip type={type} />} />
               <Scatter name="Data" data={scatterData} fill={chartColor} animationDuration={1800}>
                 {scatterData.map((_: any, index: number) => (
@@ -372,10 +394,30 @@ export const ChartCard: React.FC<ChartCardProps> = ({ title, type, data }) => {
           <h3 className="text-sm font-bold tracking-tight">{title}</h3>
           <p className="text-[10px] text-[var(--subtext)] font-semibold mt-1 uppercase tracking-wider">Dynamic Stream</p>
         </div>
-        <div className="flex gap-1">
-           <div className="w-1.5 h-1.5 rounded-full bg-primary/40" />
-           <div className="w-1.5 h-1.5 rounded-full bg-primary" />
-        </div>
+        
+        {type !== 'empty' && (
+          <div className="flex items-center gap-1.5 bg-[var(--bg-main)]/50 border border-[var(--card-border)] rounded-xl p-1">
+            {[
+              { type: 'line' as const, icon: TrendingUp, label: 'Line' },
+              { type: 'bar' as const, icon: BarChart3, label: 'Bar' },
+              { type: 'pie' as const, icon: PieIcon, label: 'Pie' },
+              { type: 'scatter' as const, icon: Activity, label: 'Scatter' }
+            ].map((btn) => (
+              <button
+                key={btn.type}
+                onClick={() => setActiveType(btn.type)}
+                className={`p-1.5 rounded-lg transition-all duration-200 ${
+                  activeType === btn.type
+                    ? 'bg-primary text-black shadow-sm'
+                    : 'text-[var(--subtext)] hover:text-[var(--text-main)] hover:bg-white/5'
+                }`}
+                title={btn.label}
+              >
+                <btn.icon className="w-3.5 h-3.5" />
+              </button>
+            ))}
+          </div>
+        )}
       </div>
       
       <div className="relative z-10">
