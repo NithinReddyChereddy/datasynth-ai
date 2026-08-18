@@ -40,7 +40,7 @@ export const FileUploader: React.FC<FileUploaderProps> = ({ onUpload, isUploadin
     >
       <input {...getInputProps()} />
       
-      <div className="p-12 flex flex-col items-center justify-center space-y-6 text-center relative z-10">
+      <div className="p-6 sm:p-12 flex flex-col items-center justify-center space-y-6 text-center relative z-10">
         <AnimatePresence mode="wait">
           {isUploading ? (
             <motion.div
@@ -70,23 +70,23 @@ export const FileUploader: React.FC<FileUploaderProps> = ({ onUpload, isUploadin
               animate={{ opacity: 1 }}
               className="flex flex-col items-center gap-4"
             >
-              <div className={`w-20 h-20 rounded-[2rem] flex items-center justify-center transition-all duration-500
+              <div className={`w-16 h-16 sm:w-20 sm:h-20 rounded-2xl sm:rounded-[2rem] flex items-center justify-center transition-all duration-500
                 ${isDragActive ? 'bg-primary text-black scale-110 shadow-2xl' : 'bg-primary/5 text-[var(--subtext)] group-hover:bg-primary/10 group-hover:text-primary group-hover:rotate-12'}
               `}>
-                <Upload className="w-10 h-10" />
+                <Upload className="w-8 h-8 sm:w-10 sm:h-10" />
               </div>
               
               <div className="space-y-1">
-                <h3 className="text-2xl font-black tracking-tighter uppercase italic">Upload Dataset</h3>
-                <p className="text-[10px] font-bold text-[var(--subtext)] uppercase tracking-[0.2em]">Drag and drop CSV or Excel files here</p>
+                <h3 className="text-xl sm:text-2xl font-black tracking-tighter uppercase italic">Upload Dataset</h3>
+                <p className="text-[9px] sm:text-[10px] font-bold text-[var(--subtext)] uppercase tracking-[0.2em]">Drag and drop CSV or Excel files here</p>
               </div>
 
-              <div className="flex gap-4 pt-4">
-                <div className="px-4 py-2 rounded-xl bg-[var(--bg-main)] border border-[var(--card-border)] text-[9px] font-bold text-[var(--subtext)] uppercase tracking-widest flex items-center gap-2 shadow-sm">
+              <div className="flex flex-wrap justify-center gap-3 sm:gap-4 pt-4">
+                <div className="px-3 sm:px-4 py-2 rounded-xl bg-[var(--bg-main)] border border-[var(--card-border)] text-[9px] font-bold text-[var(--subtext)] uppercase tracking-widest flex items-center gap-2 shadow-sm">
                    <FileCode className="w-3.5 h-3.5" />
                    CSV v2.0
                 </div>
-                <div className="px-4 py-2 rounded-xl bg-[var(--bg-main)] border border-[var(--card-border)] text-[9px] font-bold text-[var(--subtext)] uppercase tracking-widest flex items-center gap-2 shadow-sm">
+                <div className="px-3 sm:px-4 py-2 rounded-xl bg-[var(--bg-main)] border border-[var(--card-border)] text-[9px] font-bold text-[var(--subtext)] uppercase tracking-widest flex items-center gap-2 shadow-sm">
                    <CheckCircle2 className="w-3.5 h-3.5" />
                    Excel AI
                 </div>
