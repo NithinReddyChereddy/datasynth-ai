@@ -5,16 +5,19 @@ import {
   Database, 
   Settings, 
   HelpCircle,
-  Sparkles
+  Sparkles,
+  X
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface SidebarProps {
   activeView: string;
   setActiveView: (view: any) => void;
+  isOpen: boolean;
+  onClose: () => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView, isOpen, onClose }) => {
   const navItems = [
     { id: 'dashboard', icon: LayoutDashboard, label: 'Dashboard' },
     { id: 'charts', icon: BarChart3, label: 'Visuals' },
@@ -27,9 +30,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView }) =
   ];
 
   return (
-    <aside className="fixed left-0 top-0 h-screen w-64 bg-[var(--card-bg)] border-r border-[var(--card-border)] backdrop-blur-[var(--backdrop-blur)] flex flex-col z-50 transition-colors duration-300">
+    <aside className={`
+      fixed left-0 top-0 h-screen w-64 bg-[var(--card-bg)] border-r border-[var(--card-border)] backdrop-blur-[var(--backdrop-blur)] flex flex-col z-50 transition-all duration-300
+      ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+    `}>
       {/* Brand Section */}
-      <div className="p-8 pb-10">
+      <div className="p-8 pb-10 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-[0_0_20px_rgba(16,185,129,0.3)]">
             <Sparkles className="w-5.5 h-5.5 text-black" />
@@ -38,6 +44,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView }) =
             DataSynth <span className="text-primary italic">AI</span>
           </span>
         </div>
+        <button 
+          onClick={onClose}
+          className="lg:hidden p-2 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 text-[var(--subtext)] hover:text-[var(--text-main)] transition-all border border-[var(--card-border)]"
+          aria-label="Close menu"
+        >
+          <X className="w-4 h-4" />
+        </button>
       </div>
 
       {/* Main Navigation */}
@@ -46,7 +59,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView }) =
         {navItems.map((item) => (
           <button
             key={item.id}
-            onClick={() => setActiveView(item.id)}
+            onClick={() => {
+              setActiveView(item.id);
+              onClose();
+            }}
             className={`
               relative flex items-center gap-3 w-full px-4 py-3 rounded-xl transition-all duration-300 group
               ${activeView === item.id 
@@ -76,6 +92,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView }) =
               if (item.id === 'support') setActiveView('support-modal');
               else if (item.id === 'settings') setActiveView('settings-modal');
               else setActiveView(item.id);
+              onClose();
             }}
             className={`
               flex items-center gap-3 w-full px-4 py-3 rounded-xl transition-all duration-300

@@ -62,6 +62,7 @@ function App() {
     return saved ? JSON.parse(saved) : [];
   });
   const [isAiLoading, setIsAiLoading] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // --- EFFECTS ---
   useEffect(() => {
@@ -372,7 +373,7 @@ function App() {
     };
 
     return (
-      <div className="flex flex-col sm:flex-row items-center gap-3">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
         <div className="hidden lg:flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-xl">
            <Calendar className="w-3.5 h-3.5 text-[var(--subtext)]" />
            <span className="text-[10px] font-bold text-[var(--subtext)] uppercase tracking-widest whitespace-nowrap">
@@ -384,29 +385,31 @@ function App() {
           <motion.div 
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="flex items-center gap-2 bg-[var(--card-bg)] border border-[var(--card-border)] rounded-xl px-4 py-2 shadow-2xl backdrop-blur-[var(--backdrop-blur)]"
+            className="flex items-center justify-between sm:justify-start gap-2 bg-[var(--card-bg)] border border-[var(--card-border)] rounded-xl px-4 py-2.5 shadow-2xl backdrop-blur-[var(--backdrop-blur)]"
           >
-            <Calendar className="w-3.5 h-3.5 text-emerald-500 mr-2" />
-            <DatePicker
-              selected={startDate}
-              onChange={(date: Date | null) => setStartDate(date)}
-              selectsStart
-              startDate={startDate}
-              endDate={endDate}
-              placeholderText="START"
-              className="bg-transparent text-[10px] font-black text-[var(--text-main)] outline-none cursor-pointer w-16 placeholder:text-[var(--subtext)]"
-            />
-            <span className="text-[10px] text-[var(--subtext)] font-bold px-1">→</span>
-            <DatePicker
-              selected={endDate}
-              onChange={(date: Date | null) => setEndDate(date)}
-              selectsEnd
-              startDate={startDate}
-              endDate={endDate}
-              minDate={startDate || undefined}
-              placeholderText="END"
-              className="bg-transparent text-[10px] font-black text-[var(--text-main)] outline-none cursor-pointer w-16 placeholder:text-[var(--subtext)]"
-            />
+            <div className="flex items-center gap-1">
+              <Calendar className="w-3.5 h-3.5 text-emerald-500 mr-1 sm:mr-2" />
+              <DatePicker
+                selected={startDate}
+                onChange={(date: Date | null) => setStartDate(date)}
+                selectsStart
+                startDate={startDate}
+                endDate={endDate}
+                placeholderText="START"
+                className="bg-transparent text-[10px] font-black text-[var(--text-main)] outline-none cursor-pointer w-16 placeholder:text-[var(--subtext)]"
+              />
+              <span className="text-[10px] text-[var(--subtext)] font-bold px-1">→</span>
+              <DatePicker
+                selected={endDate}
+                onChange={(date: Date | null) => setEndDate(date)}
+                selectsEnd
+                startDate={startDate}
+                endDate={endDate}
+                minDate={startDate || undefined}
+                placeholderText="END"
+                className="bg-transparent text-[10px] font-black text-[var(--text-main)] outline-none cursor-pointer w-16 placeholder:text-[var(--subtext)]"
+              />
+            </div>
             {(startDate || endDate) && (
               <button 
                 onClick={() => { setStartDate(null); setEndDate(null); }}
@@ -424,7 +427,7 @@ function App() {
           value={getRangeLabel()}
           onChange={setDateRange}
           icon={<Filter className="w-3.5 h-3.5" />}
-          className="w-56"
+          className="w-full sm:w-56"
         />
       </div>
     );
@@ -436,18 +439,18 @@ function App() {
       animate={{ opacity: 1, y: 0 }}
       className="space-y-8 pb-20"
     >
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 relative z-50">
+      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 relative z-40">
         <div>
-          <h2 className="text-3xl font-black tracking-tighter uppercase italic">Intelligence Hub</h2>
+          <h2 className="text-2xl sm:text-3xl font-black tracking-tighter uppercase italic">Intelligence Hub</h2>
           <p className="text-[10px] text-[var(--subtext)] mt-2 font-bold uppercase tracking-[0.2em] opacity-60">
             Synthesized stream from {filteredData?.filename || 'your dataset'}
           </p>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full lg:w-auto">
            {renderDateFilter()}
            <button 
              onClick={() => setIsChatOpen(true)}
-             className="px-6 py-2.5 bg-primary text-black rounded-xl text-[10px] font-black uppercase tracking-widest hover:opacity-90 transition-all flex items-center gap-3 shadow-xl shadow-primary/20 border border-primary/20"
+             className="px-6 py-2.5 bg-primary text-black rounded-xl text-[10px] font-black uppercase tracking-widest hover:opacity-90 transition-all flex items-center justify-center gap-3 shadow-xl shadow-primary/20 border border-primary/20 w-full sm:w-auto"
            >
              <Sparkles className="w-3.5 h-3.5" />
              AI Insights
@@ -507,6 +510,19 @@ function App() {
     <div className="min-h-screen flex bg-[var(--bg-main)] font-sans text-[var(--text-main)] relative transition-colors duration-300">
       <div className="noise-texture opacity-[0.01]" />
       
+      {/* Sidebar mobile backdrop overlay */}
+      <AnimatePresence>
+        {isSidebarOpen && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setIsSidebarOpen(false)}
+            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
+          />
+        )}
+      </AnimatePresence>
+      
       <Sidebar 
         activeView={activeView === 'settings-modal' ? 'settings' : activeView === 'support-modal' ? 'support' : activeView} 
         setActiveView={(v) => {
@@ -514,9 +530,11 @@ function App() {
           else if (v === 'settings-modal') setIsSettingsOpen(true);
           else setActiveView(v);
         }} 
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
       />
 
-      <div className="flex-1 ml-64 flex flex-col min-h-screen">
+      <div className="flex-1 ml-0 lg:ml-64 flex flex-col min-h-screen">
         <Navbar 
           title={!data ? "Upload Dataset" : activeView.charAt(0).toUpperCase() + activeView.slice(1).replace('-modal', '')}
           onUploadClick={() => setData(null)}
@@ -525,9 +543,10 @@ function App() {
           notificationCount={notifications.filter(n => !n.read).length}
           onNotificationsClick={() => setIsNotificationsOpen(true)}
           onSettingsClick={() => setIsSettingsOpen(true)}
+          onMenuToggle={() => setIsSidebarOpen(true)}
         />
 
-        <main className="flex-1 p-8 lg:p-12 overflow-y-auto">
+        <main className="flex-1 p-4 sm:p-8 lg:p-12 overflow-y-auto">
           <div className="max-w-screen-2xl mx-auto w-full">
             <AnimatePresence mode="wait">
               {!data ? (
@@ -543,12 +562,12 @@ function App() {
                        <Zap className="w-3 h-3" />
                        Next-Gen Intelligence
                     </div>
-                    <h1 className="text-7xl font-black tracking-tighter leading-[0.9] bg-clip-text text-transparent bg-gradient-to-br from-[var(--text-main)] to-[var(--subtext)]">
+                    <h1 className="text-4xl sm:text-7xl font-black tracking-tighter leading-[0.9] bg-clip-text text-transparent bg-gradient-to-br from-[var(--text-main)] to-[var(--subtext)]">
                       ANALYZE YOUR <br />
                       <span className="text-primary italic">DATA SYNTH.</span>
                     </h1>
                     
-                    <p className="text-[var(--subtext)] text-lg max-w-xl mx-auto font-medium leading-relaxed">
+                    <p className="text-[var(--subtext)] text-sm sm:text-lg max-w-xl mx-auto font-medium leading-relaxed">
                       Experience the next generation of AI-powered data processing and visual intelligence. Upload your dataset to begin.
                     </p>
                   </div>
@@ -597,12 +616,12 @@ function App() {
                       animate={{ opacity: 1, y: 0 }}
                       className="dashboard-card overflow-hidden shadow-2xl border-[var(--card-border)]"
                     >
-                      <div className="p-8 border-b border-[var(--card-border)] flex items-center justify-between">
+                      <div className="p-6 sm:p-8 border-b border-[var(--card-border)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div>
                           <h2 className="text-xl font-bold tracking-tight">Data Matrix</h2>
                           <p className="text-xs text-[var(--subtext)] mt-1 font-medium italic">Streaming raw data from {data.filename}</p>
                         </div>
-                        <div className="flex items-center gap-2 px-4 py-2 bg-primary/5 rounded-lg border border-primary/10">
+                        <div className="flex items-center gap-2 px-4 py-2 bg-primary/5 rounded-lg border border-primary/10 self-start sm:self-auto">
                            <div className="w-2 h-2 rounded-full bg-primary" />
                            <span className="text-[10px] font-bold text-primary uppercase tracking-widest">{data.summary?.rows} RECORDS</span>
                         </div>
@@ -678,7 +697,7 @@ function App() {
             initial={{ opacity: 0, y: 100, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 100, scale: 0.9 }}
-            className="fixed bottom-8 right-8 w-full max-w-[450px] h-[700px] max-h-[85vh] z-[100] bg-[var(--card-bg)] backdrop-blur-[var(--backdrop-blur)] border border-[var(--card-border)] rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col"
+            className="fixed bottom-0 right-0 sm:bottom-8 sm:right-8 w-full sm:max-w-[450px] h-full sm:h-[700px] max-h-screen sm:max-h-[85vh] z-[100] bg-[var(--card-bg)] backdrop-blur-[var(--backdrop-blur)] border-t sm:border border-[var(--card-border)] rounded-t-[2.5rem] sm:rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col"
           >
             <div className="relative h-full">
               <button 

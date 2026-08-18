@@ -42,34 +42,34 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg z-[101] p-6"
           >
             <div className="relative w-full max-w-lg mx-auto bg-[var(--card-bg)] backdrop-blur-[var(--backdrop-blur)] border border-[var(--card-border)] rounded-[2.5rem] shadow-2xl overflow-hidden">
-              <div className="p-8 border-b border-[var(--card-border)] flex items-center justify-between">
+              <div className="p-6 sm:p-8 border-b border-[var(--card-border)] flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center">
-                    <Shield className="w-6 h-6 text-primary" />
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-primary/10 flex items-center justify-center">
+                    <Shield className="w-5.5 h-5.5 sm:w-6 sm:h-6 text-primary" />
                   </div>
                   <div>
-                    <h2 className="text-2xl font-black tracking-tighter uppercase italic">Console Settings</h2>
+                    <h2 className="text-xl sm:text-2xl font-black tracking-tighter uppercase italic">Console Settings</h2>
                     <p className="text-[10px] font-bold text-primary uppercase tracking-widest mt-1">System Preferences</p>
                   </div>
                 </div>
                 <button 
                   onClick={onClose}
-                  className="p-3 hover:bg-black/5 dark:hover:bg-white/5 rounded-2xl transition-all border border-[var(--card-border)]"
+                  className="p-2.5 sm:p-3 hover:bg-black/5 dark:hover:bg-white/5 rounded-2xl transition-all border border-[var(--card-border)]"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
-              <div className="p-10 space-y-10">
+              <div className="p-6 sm:p-10 space-y-6 sm:space-y-10">
                 {/* Theme Toggle */}
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div>
                     <h3 className="font-bold text-base">Visual Interface</h3>
                     <p className="text-[11px] text-[var(--subtext)] font-medium mt-1 uppercase tracking-wide">Switch between Light and Dark modes</p>
                   </div>
                   <button 
                     onClick={toggleTheme}
-                    className="flex items-center gap-3 px-6 py-3 bg-[var(--bg-main)] border border-[var(--card-border)] rounded-2xl hover:border-primary/50 transition-all group shadow-sm"
+                    className="flex items-center justify-center gap-3 px-6 py-3 bg-[var(--bg-main)] border border-[var(--card-border)] rounded-2xl hover:border-primary/50 transition-all group shadow-sm w-full sm:w-auto"
                   >
                     {isDarkMode ? (
                       <>
