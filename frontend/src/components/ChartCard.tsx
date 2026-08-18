@@ -37,7 +37,8 @@ export const ChartCard: React.FC<ChartCardProps> = ({ title, type, data }) => {
   const chartColor = "#10B981"; // Primary Emerald
   const secondaryColor = "#22D3EE"; // Secondary Cyan
   
-  const formatLabel = (val: number) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const formatLabel = (val: any) => {
     if (typeof val !== 'number') return val;
     const isCurrency = ['revenue', 'value', 'price', 'sales', 'amount', 'cost', 'income'].some(k => title.toLowerCase().includes(k));
     const formatted = val >= 1000000 
