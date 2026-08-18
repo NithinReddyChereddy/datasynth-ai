@@ -39,7 +39,7 @@
 
 ## 🌐 Live Demo & Deployment
 
-### [View Live Demo](https://your-frontend-link.vercel.app)
+### [View Live Demo](https://datasynth-ai-ten.vercel.app/)
 
 The project is optimized for deployment on:
 - **Backend**: Hosted on [Render](https://render.com) using a Python Web Service.
